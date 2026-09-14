@@ -1,14 +1,24 @@
-```javascript
 const TelegramBot = require('node-telegram-bot-api');
+const http = require('http');
 
 // আপনার বটের আসল সিক্রেট টোকেন
 const token = '8635592879:AAEV7BUjGhY5zRvTZ_lK93jzVb8RhkNBevM';
 
-// আপনার মিনি অ্যাপের আসল লিংক
+// মিনি অ্যাপের আসল লিংক
 const MINI_APP_URL = 'https://my-new-task-app.firebaseapp.com';
 
 // অফিসিয়াল টেলিগ্রাম চ্যানেল লিংক
 const CHANNEL_URL = 'https://t.me/earnivoe';
+
+// Render Web Service সচল রাখার জন্য ডামি সার্ভার
+const PORT = process.env.PORT || 3000;
+const server = http.createServer((req, res) => {
+  res.writeHead(200, { 'Content-Type': 'text/plain' });
+  res.end('Earnivo Telegram Bot is running live!\n');
+});
+server.listen(PORT, () => {
+  console.log(`Web server listening on port ${PORT}`);
+});
 
 // বট পোলিং চালু করা
 const bot = new TelegramBot(token, { polling: true });
@@ -16,10 +26,8 @@ const bot = new TelegramBot(token, { polling: true });
 bot.onText(/\/start/, (msg) => {
   const chatId = msg.chat.id;
 
-  // আপনার নির্ধারিত আসল ক্যাপশন
   const welcomeCaption = `👋 WELCOME!\n\nআমাদের Earning Bot-এ আপনাকে স্বাগতম। 💙\n\nএখানে পাবেন—\n\n💼 Online Work\n💰 Earning Opportunities\n📚 Useful Guides & Resources\n🔥 নতুন নতুন Updates\n\n✨ শুরু করতে নিচের Get Started অথবা Open-এ ক্লিক করুন।`;
 
-  // দুটি ইনলাইন বাটন: Get Started (মিনি অ্যাপ) এবং Official Channel (চ্যানেল লিংক)
   const keyboard = {
     inline_keyboard: [
       [
@@ -43,4 +51,3 @@ bot.onText(/\/start/, (msg) => {
 });
 
 console.log('Earnivo Bot is active and running 24/7!');
-```
